@@ -1,0 +1,6 @@
+{application, erl_import, 
+    [{description,"LFE macro library."}
+    ,{applications,[kernel,stdlib]}
+    ,{vsn,"v0.0.0"}
+    ,{modules,[]}
+    ]}.
