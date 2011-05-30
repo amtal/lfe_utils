@@ -1,3 +1,15 @@
-WIP
+    Example:
 
-See src/erl_import_app.lfe for example.
+(include-file "include/erl-import.lfe")
+(defmodule my_module
+  (export (test 0))
+  (import (erl-import lists)
+          (erl-import erlang)))
+
+(defun test () 
+  ; familiar-looking function calls:
+  (list (erlang:abs -5) 
+        (lists:sort '[1 2 3])
+        (lists:append '[1 2] '[3 4])
+        (lists:append '[[1 2] [3 4]]))
+
