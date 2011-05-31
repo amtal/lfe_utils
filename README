@@ -1,10 +1,9 @@
-    Example:
+    EXAMPLE:
 
-(include-file "include/erl-import.lfe")
+(include-file "include/erl_import.lfe")
 (defmodule my_module
   (export (test 0))
-  (import (erl-import lists)
-          (erl-import erlang)))
+  (using lists erlang))
 
 (defun test () 
   ; familiar-looking function calls:
@@ -13,3 +12,7 @@
         (lists:append '[1 2] '[3 4])
         (lists:append '[[1 2] [3 4]]))
 
+
+    UNIT TEST:
+
+rebar compile -v;erl -pa ebin -s erl_import_app

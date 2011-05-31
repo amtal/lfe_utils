@@ -13,6 +13,6 @@
         (0.0 (math:sin 0))
         (1 (min 1 2))
         (2 (max 1 2)))
-    (: io format 'user '"~p~n" '[#(1 2 3)])
+    (: io format 'user '"Test ok.~n" '())
     'test_ok))
 
