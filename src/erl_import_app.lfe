@@ -1,3 +1,4 @@
+;; Unit test for include/erl_import.lfe
 (include-file "include/erl_import.lfe")
 (defmodule erl_import_app
   (export (start 0))

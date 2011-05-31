@@ -1,13 +1,29 @@
+Macro that renames external calls to standard Erlang format.
+
+Good news: looks like normal Erlang. Calls are still external, code upgrades
+function correctly. Due to unique module names, unintentional name collision
+are impossible.
+
+Bad news: module being used must be compiled, so no circular references for
+you. Also, (using erlang) seems to be buggy.
+
+
     EXAMPLE:
 
-(include-file "include/erl_import.lfe")
+    rebar.config:
+{deps, 
+    [{erl_import,"v0.0.0",
+        {git,"git://github.com/amtal/erl_import.git","HEAD"}}]}.
+
+    mymodule.erl:
+(include-file "deps/erl_import/include/erl_import.lfe")
 (defmodule my_module
   (export (test 0))
-  (using lists erlang))
+  (using lists math)) ; <--
 
 (defun test () 
-  ; familiar-looking function calls:
-  (list (erlang:abs -5) 
+  ;       \/\/\/
+  (list (math:sin 0) 
         (lists:sort '[1 2 3])
         (lists:append '[1 2] '[3 4])
         (lists:append '[[1 2] [3 4]]))
