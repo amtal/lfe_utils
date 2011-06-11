@@ -12,6 +12,7 @@
         (1.0 (math:cos 0.0))
         ('(1 2 3) (lists:sort '(2 3 1)))
         ('(1 2 3 4) (lists:append '(1 2) '(3 4))))
-    (: io format 'user '"Test ok.~n" '())
-    'test_ok))
+    (: io format 'user '"Tests ok.~n" '())
+    (halt 0)
+    'ok))
 
