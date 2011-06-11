@@ -1,34 +1,37 @@
-Macro that renames external calls to standard Erlang format.
+    1.0 USING LIBRARY
 
-Good news: looks like normal Erlang. Calls are still external, code upgrades
-function correctly. Due to unique module names, unintentional name collision
-are impossible.
+Assuming you use rebar (you should!) add the lfe_utils repository to 'deps'.
+Use a specific tag, to ensure you can reconstruct the code any time later.
 
-Bad news: module being used must be compiled, so no circular references for
-you. Also, (using erlang) seems to be buggy.
+{lfe_utils, ".*", {git,"git://github.com/amtal/lfe_utils.git",{tag,"v0.1.2"}}}
 
 
-    EXAMPLE:
+    2.0 FEATURES
+    
+    2.1 ERLANG-STYLE EXTERNAL CALLS
 
-    rebar.config:
-{deps, 
-    [{erl_import,"v0.0.0",
-        {git,"git://github.com/amtal/erl_import.git","HEAD"}}]}.
+The 'using' macro in include/using.lfe creates Erlang-style call aliases.
 
-    mymodule.erl:
-(include-file "deps/erl_import/include/erl_import.lfe")
+Pro: looks familiar.
+Con: compiled module must already be in code path, so not really usable within
+a single project.
+
+Example: 
+
+(include-file "deps/lfe_utils/include/using.lfe")
 (defmodule my_module
   (export (test 0))
   (using lists math)) ; <--
 
-(defun test () 
-  ;       \/\/\/
-  (list (math:sin 0) 
-        (lists:sort '[1 2 3])
-        (lists:append '[1 2] '[3 4])
-        (lists:append '[[1 2] [3 4]]))
+(defun test ()          
+  (math:sin 0) 
+  (lists:sort '[1 2 3])
+  (lists:append '[1 2] '[3 4])
+  (lists:append '[[1 2] [3 4]]))
 
 
-    UNIT TEST:
+    3.0 UNIT TESTS
 
-rebar compile -v;erl -pa ebin -s erl_import_app
+Run this and watch for errors: 
+
+rebar compile -v && erl -pa ebin -s lfe_utils_app
