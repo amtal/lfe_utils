@@ -10,7 +10,7 @@
 ;;
 ;; And that's right. I'm using the -compiler's- process dictionary.
 ;;
-;; What up? 8)
+;; What up? B)
 (eval-when-compile
 (defun gensym () (gensym 'gensym))
 (defun gensym (prefix)
