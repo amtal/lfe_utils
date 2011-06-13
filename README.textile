@@ -1,0 +1,35 @@
+These are utilities for writing cleaner, clearer, more maintainable code through better functional abstractions.
+
+Erlang's handling of concurrency, failure, and timing (ie side effects) is absolutely top-notch. However, the synchronous (ie pure) parts aren't as developed as those of other functional languages.
+
+The goal is to find abstractions that fit well into Erlang practices
+
+
+h2. Including
+
+Assuming you use rebar, add the lfe_utils repository to 'deps'. Choose the latest tag.
+
+@{lfe_utils, ".*", {git,"git://github.com/amtal/lfe_utils.git",{tag,"v0.1.2"}}}@
+
+
+h2. Feature Overview
+
+* include/using.lfe
+** Erlang-style external calls via @(using mod1 mod2 ...)@
+* include/cut.lfe
+** A kind of currying/function specialization/limited fun shorthand from Scheme, via @(cut a b c ...)@. Creates a fun with any @<>@ holes replaced by arguments.
+** The @(cute a b c ...)@ variant evaluates arguments immediately, rather than when the produced fun is called. This lifts operations out of loops. (Like constant lifting in compilers.)
+* include/gensym.lfe
+** Compile-time unique atom generation with @(gensym)@ and @(gensym prefix)@, for writing better macros.
+
+Consult individual files for documentation and examples.
+
+
+h2. Versions
+
+Many of the utilities are exploratory, or even experimental in nature. Watch the version tags: minor bumps indicate fixes and optimizations, medium bumps feature additions. Major bumps will indicate backwards incompatible changes after v1.0.0: until then, medium bumps may break compatibility.
+
+
+h2. Unit Tests
+
+Run @make@ and watch for errors.
