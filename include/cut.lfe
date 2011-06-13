@@ -1,4 +1,4 @@
-(include-file "gensym.lfe")
+(include-file "include/gensym.lfe")
 ;; Fun specialization macro. Stands for "curry up this".
 ;;
 ;; Expanding (cut a b c ...) creates a fun that applies (a b c ...), 
@@ -54,5 +54,5 @@
          (evals (lc ((<- t (when (== 'eval (element 1 t))) types))
                     `(,(element 2 t) ,(element 3 t)))))
     (if (== '[] evals) 
-      fun ; cut-equivalent
+      `(lambda ,args ,body) 
       `(let ,evals (lambda ,args ,body))))))
