@@ -1,4 +1,5 @@
-(include-file "include/gensym.lfe")
+;; Requires: (include-file "deps/lfe_utils/include/gensym.lfe")
+;;
 ;; Fun specialization macro. Stands for "curry up this".
 ;;
 ;; Expanding (cut a b c ...) creates a fun that applies (a b c ...), 

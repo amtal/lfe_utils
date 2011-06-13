@@ -1,4 +1,5 @@
 (include-file "include/using.lfe")
+(include-file "include/gensym.lfe")
 (include-file "include/cut.lfe")
 (defmodule lfe_utils_app
   (export (start 0))
