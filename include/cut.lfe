@@ -41,3 +41,18 @@
                    (if (/= s 'pass) s e)))
          (body (: lists zipwith replace symbols es)))
     `(lambda ,args ,body))))
+
+(defmacro cute (es
+  (let* ((types (lc ((<- e es)) 
+                    (cond ((== '<> e)  (tuple 'arg   (gensym 'cute)))
+                          ((is_list e) (tuple 'eval  (gensym 'cute) e))
+                          ('true       (tuple 'const e)))))
+         (body (lc ((<- t types)) 
+                   (element 2 t)))
+         (args (lc ((<- t (when (== 'arg (element 1 t))) types)) 
+                   (element 2 t)))
+         (evals (lc ((<- t (when (== 'eval (element 1 t))) types))
+                    `(,(element 2 t) ,(element 3 t)))))
+    (if (== '[] evals) 
+      fun ; cut-equivalent
+      `(let ,evals (lambda ,args ,body))))))
