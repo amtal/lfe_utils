@@ -2,6 +2,7 @@
 (include-file "include/gensym.lfe")
 (include-file "include/cut.lfe")
 (include-file "include/alambda.lfe")
+(include-file "include/block.lfe")
 (defmodule lfe_utils_app
   (export (start 0))
   (using gen_server math lists))
@@ -10,11 +11,11 @@
   (test-using)
   (test-cut)
   (test-alambda)
+  (test-block)
   (: io format '"All tests passed.~n" '())
   (halt 0))
 
 (defun test-using () 
-        ; familiar looking names
   (let ((_ (gen_server:module_info))
         (_ (gen_server:module_info 'exports))
         (0.0 (math:sin 0.0))
@@ -34,4 +35,28 @@
 (defun test-alambda ()
   (let* ((fac (alambda (n) (if (== 0 n) 1 (* n (self (- n 1))))))
          ('(1 1 2 6 24 120) (lists:map fac (lists:seq 0 5))))
+    'ok))
+
+(defun test-block ()
+  (let* ((f (lambda (x) 
+              (block sanitize
+                (block checks
+                  (if (< x 0) (return-from checks 'negative))
+                  (if (> x 12) 
+                      (if (< x 14) 
+                          (return-from checks 'fishy)))
+                  (if (== 7 x) (return-from sanitize 'good))
+                  'unknown))))
+         ('good (funcall f 7))
+         ('negative (funcall f -7))
+         ('fishy (funcall f 13))
+         ('unknown (funcall f 42))
+         (g (lambda (x) 
+              (ablock proc 
+                x
+                (+ 1 it)
+                (+ 1 it)
+                (return-from proc it)
+                'err)))
+         (3 (funcall g 1)))
     'ok))
