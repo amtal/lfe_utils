@@ -2,7 +2,7 @@ These are utilities for writing cleaner, clearer, more maintainable code through
 
 Erlang's handling of concurrency, failure, and timing (ie side effects) is absolutely top-notch. However, the synchronous (ie pure) parts aren't as developed as those of other functional languages.
 
-The goal is to find abstractions that fit well into Erlang practices
+The goal is to find abstractions that fit well into Erlang practices.
 
 
 h2. Including
@@ -33,3 +33,11 @@ Many of the utilities are exploratory, or even experimental in nature. Watch the
 h2. Unit Tests
 
 Run @make@ and watch for errors.
+
+
+
+Note: the unique situation with general library-esque macros used via straight file inclusion, discourages the decomposition of work into many component functions. This is completely at odds with normal Erlang programming practice, and thus the code in this project is not representative of what LFE code looks like.
+
+It is, however, lots of fun to write!
+
+Also src/lfe_utils_app.lfe is test code, not example code. Use comments in include/*.lfe for reference instead.
