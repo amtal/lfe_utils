@@ -21,6 +21,11 @@ h2. Feature Overview
 ** The @(cute a b c ...)@ variant evaluates arguments immediately, rather than when the produced fun is called. This lifts operations out of loops. (Like constant lifting in compilers.)
 * include/gensym.lfe
 ** Compile-time unique atom generation with @(gensym)@ and @(gensym prefix)@, for writing better macros.
+* include/alambda.lfe
+** Self-recursive anonymous fun, with itself bound to @self@.
+* include/block.lfe
+** Functional-style @(block name ...)@ and @(return-to name val)@, lexically scoped early returns. 
+** Anamorphic variant @(ablock name ...)@ where every statement in @...@ can access the result of the previous one as @it@. Should produce some interesting, procedural-esque code.
 
 Consult individual files for documentation and examples.
 
