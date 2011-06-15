@@ -1,6 +1,7 @@
 (include-file "include/using.lfe")
 (include-file "include/gensym.lfe")
 (include-file "include/cut.lfe")
+(include-file "include/alambda.lfe")
 (defmodule lfe_utils_app
   (export (start 0))
   (using gen_server math lists))
@@ -8,6 +9,8 @@
 (defun start ()
   (test-using)
   (test-cut)
+  (test-alambda)
+  (: io format '"All tests passed.~n" '())
   (halt 0))
 
 (defun test-using () 
@@ -18,7 +21,7 @@
         (1.0 (math:cos 0.0))
         ('(1 2 3) (lists:sort '(2 3 1)))
         ('(1 2 3 4) (lists:append '(1 2) '(3 4))))
-    (: io format 'user '"Using ok.~n" '())))
+    'ok))
 
 (defun test-cut ()
   (let* ((a '(1 2 3))
@@ -26,4 +29,9 @@
          (b (lists:map (cut * 2 <>) a))
          (b (lists:map (cut * 2 <>) a))
          (b (lists:map (cute * (div 8 4) <>) a)))
-    (: io format 'user '"Cut ok.~n" '())))
+    'ok))
+
+(defun test-alambda ()
+  (let* ((fac (alambda (n) (if (== 0 n) 1 (* n (self (- n 1))))))
+         ('(1 1 2 6 24 120) (lists:map fac (lists:seq 0 5))))
+    'ok))
