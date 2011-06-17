@@ -26,10 +26,11 @@
 ;;
 ;;  EXAMPLE:
 ;;
-;; (defun get-hostname-from-url [x]
-;;   (-> (case x ((binary "http://" rest) rest) ; strip protocol
-;;               ((binary "https://" rest) rest)
-;;               (_ x))
+;; (defun get-hostname [url]
+;;   (-> (case url ; strip protocol
+;;         ((binary "http://" (rest bytes)) rest)
+;;         ((binary "https://" (rest bytes)) rest)
+;;         (x x))
 ;;       (binary:split <> (binary "/")) car ; strip path
 ;;       (binary:split <> (binary ":")) car ; strip port
 ;;       binary_to_list string:to_lower list_to_binary)) ; lower case

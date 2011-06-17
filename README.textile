@@ -26,6 +26,8 @@ h2. Feature Overview
 * include/block.lfe
 ** Functional-style @(block name ...)@ and @(return-to name val)@, lexically scoped early returns. 
 ** Anaphoric variant @(ablock name ...)@ where every statement in @...@ can access the result of the previous one as @it@. Should produce some interesting, procedural-esque code.
+* include/pointless.lfe
+** Point-free function composition via @(-> e1 e2 ...)@ macro. Provides a Unix pipe-like syntax, with flexible currying.
 
 Consult individual files for documentation and examples.
 

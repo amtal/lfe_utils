@@ -6,15 +6,17 @@
 (include-file "include/cut.lfe")
 (include-file "include/alambda.lfe")
 (include-file "include/block.lfe")
+(include-file "include/pointless.lfe")
 (defmodule lfe_utils_app
   (export (start 0))
-  (using gen_server math lists))
+  (using gen_server math lists binary string))
 
 (defun start []
   (test-using)
   (test-cut)
   (test-alambda)
   (test-block)
+  (test-pointless)
   (: io format '"All tests passed.~n" '())
   (halt 0))
 
@@ -62,4 +64,19 @@
                 (return-from proc it)
                 'err)))
          (3 (funcall g 1)))
+    'ok))
+
+(defun test-pointless []
+  (let* ((get-hostname
+           (cut -> 
+                <> 
+                (case <> 
+                  ((binary "http://" (rest bytes)) rest)
+                  ((binary "https://" (rest bytes)) rest)
+                  (x x))
+                (binary:split <> (binary "/")) car
+                (binary:split <> (binary ":")) car
+                binary_to_list string:to_lower list_to_binary))
+         ((binary "test.com") 
+          (funcall get-hostname (binary "http://test.com:80/foo/bar?args"))))
     'ok))
