@@ -9,7 +9,7 @@
           (catch ((tuple 'throw (tuple ',id val) _) 
                   val))))))
 
-;; Quick implementation of Paul Graham's anamorphic variant
+;; Quick implementation of Paul Graham's anaphoric variant
 ;; from On Lisp. Should allow a very procedural code style.
 ;;
 ;; Binds the result of each expression in the body as 'it' for

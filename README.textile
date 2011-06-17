@@ -25,7 +25,7 @@ h2. Feature Overview
 ** Self-recursive anonymous fun, with itself bound to @self@.
 * include/block.lfe
 ** Functional-style @(block name ...)@ and @(return-to name val)@, lexically scoped early returns. 
-** Anamorphic variant @(ablock name ...)@ where every statement in @...@ can access the result of the previous one as @it@. Should produce some interesting, procedural-esque code.
+** Anaphoric variant @(ablock name ...)@ where every statement in @...@ can access the result of the previous one as @it@. Should produce some interesting, procedural-esque code.
 
 Consult individual files for documentation and examples.
 
