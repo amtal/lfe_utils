@@ -15,11 +15,14 @@
 ;;  IMPLEMENTATION:
 ;;
 ;; The -> macro starts as an elegant way to write expressions like
-;; f(g(h(x))) where [f..h] are functions: (-> (h x) g f) 
+;; f(g(h(x))) where [f..h] are functions: (-> x h g f) 
 ;;      
 ;; It is then extended to express composition of curried/specialized functions
 ;; like f(a,b,g(c,h(x),d),e) where [a..e] are arbitrary expressions: 
-;; (-> (h x) (g c <> d) (f a b <> e))
+;; (-> x h (g c <> d) (f a b <> e))
+;;
+;; For the hell of it, it supports deep arguments so you can mix styles:
+;; f(g(h(x))) can be (-> x (f (g (h <>))))
 ;;
 ;; Note the intuitive order of evaluation, a property typical f(g(h(x))) style,
 ;; and Haskell's f . g . h $ x style lack.
