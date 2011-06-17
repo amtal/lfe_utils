@@ -13,11 +13,11 @@
 ;;      Examples:
 ;;
 ;; Well suited to folds, maps, and zipwiths:
-;;  (map (cut + 1 <>) vs)     -> (map (lambda (x) (+ 1 x)) vs)
-;;  (filter (cut >= 0 <>) vs) -> (filter (lambda (x) (>= 0 x) vs)
+;;  (map (cut + 1 <>) vs)     -> (map (lambda [x] (+ 1 x)) vs)
+;;  (filter (cut >= 0 <>) vs) -> (filter (lambda [x] (>= 0 x) vs)
 ;;
 ;; Can be used to specialize complex calls into simpler ones:
-;;  (cut foo a b <> c <> d)   -> (lambda (x y) (foo a b x c y d))
+;;  (cut foo a b <> c <> d)   -> (lambda [x y] (foo a b x c y d))
 ;;
 ;; The "e" variant evaluates arguments when the fun is created, rather than
 ;; when it's called. This is a concise way to lift expensive operations out of
@@ -38,8 +38,7 @@
                         'pass)))
          (args (lc ((<- s (when (/= 'pass s)) symbols)) 
                    s))
-         (replace (lambda (s e)
-                   (if (/= s 'pass) s e)))
+         (replace (lambda [s e] (if (/= s 'pass) s e)))
          (body (: lists zipwith replace symbols es)))
     `(lambda ,args ,body))))
 

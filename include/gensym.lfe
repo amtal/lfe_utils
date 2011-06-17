@@ -12,8 +12,8 @@
 ;;
 ;; What up? B)
 (eval-when-compile
-(defun gensym () (gensym 'gensym))
-(defun gensym (prefix)
+(defun gensym [] (gensym 'gensym))
+(defun gensym [prefix]
   (let* ((pdict-key (tuple 'gensym prefix))
          (next-index (case (get pdict-key) 
                        ('undefined 0)
