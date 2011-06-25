@@ -56,23 +56,27 @@
 
 ;; Recursively build match-lambda clauses from the shorthand.
 (defun lfe_utils:base:parse-clause [exps]
-  (let* (((cons args exps) exps)
+  (let* (; helper 'functions'
          (guard? (lambda [e] (andalso (is_list e) (== 'when (car e)))))
+         (all-gs (lambda [g] (cons 'andalso (cdr g))))
+         ; one argument list
+         ((cons args exps) exps)
+         ; zero to many guards (get rewritten to core ifs)
          ((tuple guards exps) (: lists splitwith guard? exps))
          (guards (case (length guards)
-            (0 (list)) 
-            (1 (list guards)) 
-            (_ (list `(when (orelse ,@(: lists map (lambda [g] (cons 'andalso (cdr g)))
-                                                guards)))))))
+                   (0 `()) 
+                   (1 `(,guards)) 
+                   (_ `((when (orelse ,@(: lists map all-gs guards)))))))
+         ; one body
          ((cons body exps) exps))
-    (cons `(,args ,@guards ,body)
-          (if (== '() exps) 
-            '() 
-            (lfe_utils:base:parse-clause exps)))))
+    (cons `(,args ,@guards ,body) ; clause, potentially followed by others
+          (if (== '() exps) '() (lfe_utils:base:parse-clause exps)))))
 
 
 ;; Test if expression contains anything other than unquoted atoms.
 (defun lfe_utils:base:not-patternmatch? [exps]
-  (: lists all (lambda [e] (andalso (is_atom e) (/= 39 (car (atom_to_list e)))))
-               exps))
+  (: lists all (lambda [e] 
+                 (andalso (is_atom e) 
+                          (/= 39 (car (atom_to_list e)))))
+     exps))
 )
