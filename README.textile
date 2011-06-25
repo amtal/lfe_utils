@@ -14,6 +14,8 @@ Assuming you use rebar, add the lfe_utils repository to 'deps'. Choose the lates
 
 h2. Feature Overview
 
+* include/defn.lfe
+** Simplified, functional alternatives to @defun@ and @lambda@.
 * include/using.lfe
 ** Erlang-style external calls via @(using mod1 mod2 ...)@
 * include/cut.lfe
