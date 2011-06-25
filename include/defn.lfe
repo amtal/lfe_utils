@@ -65,7 +65,7 @@
          ((tuple guards exps) (: lists splitwith guard? exps))
          (guards (case (length guards)
                    (0 `()) 
-                   (1 `(,guards)) 
+                   (1 guards) 
                    (_ `((when (orelse ,@(: lists map all-gs guards)))))))
          ; one body
          ((cons body exps) exps))

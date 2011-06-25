@@ -90,13 +90,17 @@
          ('ok (funcall multi 0))
          ('ok (funcall multi 1))
          ('5  (funcall multi 5))
-         (guard (fn [x] (when (< x 5) (> x 0))
-                        (when (== 10 x))
-                        'ok
-                    [x] x))
-         ('ok (funcall guard 2))
-         ('ok (funcall guard 10))
-         ('6 (funcall guard 6))
+         (guard (fn [x] (when (> x 0)) 'true
+                    [_] 'false))
+         ('true (funcall guard 1))
+         ('false (funcall guard -1))
+         (guards (fn [x] (when (< x 5) (> x 0))
+                         (when (== 10 x))
+                         'ok
+                     [x] x))
+         ('ok (funcall guards 2))
+         ('ok (funcall guards 10))
+         ('6 (funcall guards 6))
          (macro (fn [`(,a ,b)] (+ a b)))
          (3 (funcall macro (list 1 2)))
          ; defns are almost identical to fns
