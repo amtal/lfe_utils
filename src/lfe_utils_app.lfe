@@ -7,6 +7,7 @@
 (include-file "include/alambda.lfe")
 (include-file "include/block.lfe")
 (include-file "include/pointless.lfe")
+(include-file "include/defn.lfe")
 (defmodule lfe_utils_app
   (export (start 0))
   (using gen_server math lists binary string))
@@ -17,6 +18,7 @@
   (test-alambda)
   (test-block)
   (test-pointless)
+  (test-defn)
   (: io format '"All tests passed.~n" '())
   (halt 0))
 
@@ -80,3 +82,31 @@
          ((binary "test.com") 
           (funcall get-hostname (binary "http://test.com:80/foo/bar?args"))))
     'ok))
+
+(defun test-defn []
+  (let* ((simple (fn [a b] (+ a b)))
+         (3 (funcall simple 1 2))
+         (multi (fn [0] 'ok [1] 'ok [x] x))
+         ('ok (funcall multi 0))
+         ('ok (funcall multi 1))
+         ('5  (funcall multi 5))
+         (guard (fn [x] (when (< x 5) (> x 0))
+                        (when (== 10 x))
+                        'ok
+                    [x] x))
+         ('ok (funcall guard 2))
+         ('ok (funcall guard 10))
+         ('6 (funcall guard 6))
+         (macro (fn [`(a b)] (+ a b)))
+         (3 (funcall macro (list 1 2)))
+         ; defns are almost identical to fns
+         ('true (ternary-or 'undefined 'true))
+         ('false (ternary-or 'false 'false))
+         ('undefined (ternary-or 'false 'undefined)))
+    'ok))
+
+(defn ternary-or
+  ['true _] 'true
+  [_ 'true] 'true
+  ['false 'false] 'false
+  [_ _] 'undefined)
