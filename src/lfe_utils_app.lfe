@@ -97,7 +97,7 @@
          ('ok (funcall guard 2))
          ('ok (funcall guard 10))
          ('6 (funcall guard 6))
-         (macro (fn [`(a b)] (+ a b)))
+         (macro (fn [`(,a ,b)] (+ a b)))
          (3 (funcall macro (list 1 2)))
          ; defns are almost identical to fns
          ('true (ternary-or 'undefined 'true))
