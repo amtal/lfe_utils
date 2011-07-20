@@ -1,9 +1,14 @@
-These are utilities for writing cleaner, clearer, more maintainable code through better functional abstractions.
+A set of language abstractions aimed at solving the following conundrum:
 
-Erlang's handling of concurrency, failure, and timing (ie side effects) is absolutely top-notch. However, the synchronous (ie pure) parts aren't as developed as those of other functional languages.
+- Standard Erlang syntax was designed for imperative programmers.
+- Lisp Flavored Erlang syntax was modeled after imperative Lisps.
+- The Erlang VM was built for functional, not imperative, code.
 
-The goal is to find abstractions that fit well into Erlang practices.
+Erlang is known for making some very hard things trivial, and some easy things hard. A lot of that difficulty is introduced by imperative syntax on a functional interpreter.
 
+By implementing techniques from Clojure/Scala/Haskell as LFE macros, we can make syntax match semantics. The awkwardness of writing functional code with imperative syntax is then avoided, and previously unreadable code becomes clean and maintainable.
+
+As techniques develop and new abstractions are found, Erlang may become useful in previously inaccessible fields.
 
 Using
 =====
@@ -102,7 +107,9 @@ Examples
 ; for writing better macros...
 
 ; Functional-style @(block name ...)@ and @(return-to name val)@, lexically
-; scoped early returns...
+; scoped early returns... (This is a common Erlang pattern with throw-try-catch
+; blocks, and shows up every time system input is sanitized. Can't think of a
+; short and simple example right now.)
 
 ; Anaphoric variant @(ablock name ...)@ where every statement in @...@ can
 ; access the result of the previous one as @it@. Should produce some
