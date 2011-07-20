@@ -12,28 +12,85 @@ Assuming you use rebar, add the lfe_utils repository to 'deps'. Choose the lates
 @{lfe_utils, ".*", {git,"git://github.com/amtal/lfe_utils.git",{tag,"v0.1.2"}}}@
 
 
-h2. Feature Overview
+h2. Examples
 
-* include/defn.lfe
-** Simplified, functional alternatives to @defun@ and @lambda@.
-* include/using.lfe
-** Erlang-style external calls via @(using mod1 mod2 ...)@
-* include/cut.lfe
-** A kind of currying/function specialization/limited fun shorthand from Scheme, via @(cut a b c ...)@. Creates a fun with any @<>@ holes replaced by arguments.
-** The @(cute a b c ...)@ variant evaluates arguments immediately, rather than when the produced fun is called. This lifts operations out of loops. (Like constant lifting in compilers.)
-* include/gensym.lfe
-** Compile-time unique atom generation with @(gensym)@ and @(gensym prefix)@, for writing better macros.
-* include/alambda.lfe
-** Self-recursive anonymous fun, with itself bound to @self@.
-* include/block.lfe
-** Functional-style @(block name ...)@ and @(return-to name val)@, lexically scoped early returns. 
-** Anaphoric variant @(ablock name ...)@ where every statement in @...@ can access the result of the previous one as @it@. Should produce some interesting, procedural-esque code.
-* include/pointless.lfe
-** Point-free function composition via @(-> e1 e2 ...)@ macro. Provides a Unix pipe-like syntax, with flexible currying.
-* include/in.lfe
-** Reversed @(in exp [b1 (...) b2 (...)])@ variant of @let*@. Focuses in composing functions, rather than sequencing side effects.
-Consult individual files for documentation and examples.
+{% highlight clojure %}
+(include-lib "lfe_utils/include/all.lfe")
 
+(defnmodule examples
+  (using lists) ; Traditional mod:fun call syntax.
+  (export all))
+
+; Simple, functional alternatives to @defun@ and @lambda@.
+
+(defn ternary-or
+  ['true _] 'true
+  [_ 'true] 'true
+  ['false 'false] 'false
+  [_ _] 'undefined)
+
+(defn hex-char?
+  [c] (when (=< #x41 c) (=< c #x46)) ; A-F
+      (when (=< #x61 c) (=< c #x66)) ; a-f
+      (when (=< #x30 c) (=< c #x39)) ; 0-9
+      'true
+  [_] 'false)
+
+(defn sum [xs] (lists:foldl (fn [x acc] (+ x acc)) 0 xs))
+
+(defn comp [y xs] (lists:map (fn [x] (when (< x y)) 'lt
+                                 [x] (when (> x y)) 'gt
+                                 [_] 'eq)))
+
+(defn list->rle [xs] 
+  (lists:reverse 
+    (lists:foldl (fn [x (tuple c n acc)] 
+                     (if (== c x) 
+                       (tuple c (+ 1 n) acc)
+                       (tuple x 0 (cons (cons c n) acc))))
+                 (tuple (car xs) 0 '()) 
+                 xs)))
+
+; A kind of currying/function specialization, for very simple funs.
+; Constructs a fun with any <> holes filled with arguments.
+
+(defn only-positive [xs] (lists:filter (cut >= 0 <>) vs))
+(defn incr-list [xs] (map (cut + 1 <>) xs))
+(defn specialize [a b c d] (cut foo a b <> c <> d)) ; arity-2 fun
+
+; Has an "e" (evaluated) variant, where non-hole arguments are evaluated when
+; the fun's constructed, not when called. (Loop-lifting optimization.)
+
+(defn dialyze [modules] 
+  (lists:map (cute dialyze-module <> (build-plt modules)) modules))
+
+(defn float-re [] 
+  (cute re:run <> (element 2 (re:compile '"[+-]?[0-9]*\\.?[0-9]*"))))
+
+; Self-recursive (anaphoric) lambda variant, binding itself to 'self'.
+
+(defn fac-fun [] (alambda [n] (if (== 0 n) 1 (* n (self (- n 1))))))
+
+; Compile-time unique atom generation with @(gensym)@ and @(gensym prefix)@,
+; for writing better macros.
+
+; Functional-style @(block name ...)@ and @(return-to name val)@, lexically
+; scoped early returns. 
+
+; Anaphoric variant @(ablock name ...)@ where every statement in @...@ can
+; access the result of the previous one as @it@. Should produce some
+; interesting, procedural-esque code.
+
+; Point-free function composition via @(-> e1 e2 ...)@ macro. Provides a Unix
+; pipe-like syntax, with flexible currying.
+
+; Reversed @(in exp [b1 (...) b2 (...)])@ variant of @let*@. Focuses in
+; composing functions, rather than sequencing side effects.
+
+
+{% endhighlight %}
+
+Consult individual files for details.
 
 h2. Versions
 
