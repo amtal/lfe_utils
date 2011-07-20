@@ -8,6 +8,7 @@
 (include-file "include/block.lfe")
 (include-file "include/pointless.lfe")
 (include-file "include/defn.lfe")
+(include-file "include/in.lfe")
 (defmodule lfe_utils_app
   (export (start 0))
   (using gen_server math lists binary string))
@@ -19,6 +20,7 @@
   (test-block)
   (test-pointless)
   (test-defn)
+  (test-in)
   (: io format '"All tests passed.~n" '())
   (halt 0))
 
@@ -114,3 +116,12 @@
   [_ 'true] 'true
   ['false 'false] 'false
   [_ _] 'undefined)
+
+(defun test-in [] 
+  (let ((14 (in (+ a b)
+                [a (* i j)
+                 b (* x y)
+                 (tuple i j) (tuple 1 2)
+                 x 3 y 4])))
+    'ok))
+

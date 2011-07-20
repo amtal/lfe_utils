@@ -1,4 +1,5 @@
 .eunit/
 ebin/
+include/*.beam
 erl_crash.dump
 *.swp

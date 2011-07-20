@@ -30,7 +30,8 @@ h2. Feature Overview
 ** Anaphoric variant @(ablock name ...)@ where every statement in @...@ can access the result of the previous one as @it@. Should produce some interesting, procedural-esque code.
 * include/pointless.lfe
 ** Point-free function composition via @(-> e1 e2 ...)@ macro. Provides a Unix pipe-like syntax, with flexible currying.
-
+* include/in.lfe
+** Reversed @(in exp [b1 (...) b2 (...)])@ variant of @let*@. Focuses in composing functions, rather than sequencing side effects.
 Consult individual files for documentation and examples.
 
 
