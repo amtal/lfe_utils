@@ -5,16 +5,18 @@ Erlang's handling of concurrency, failure, and timing (ie side effects) is absol
 The goal is to find abstractions that fit well into Erlang practices.
 
 
-h2. Including
+Including
+=========
 
 Assuming you use rebar, add the lfe_utils repository to 'deps'. Choose the latest tag.
 
 @{lfe_utils, ".*", {git,"git://github.com/amtal/lfe_utils.git",{tag,"v0.1.2"}}}@
 
 
-h2. Examples
+Examples
+========
 
-{% highlight clojure %}
+```clojure
 (include-lib "lfe_utils/include/all.lfe")
 
 (defnmodule examples
@@ -97,16 +99,18 @@ h2. Examples
 ; access the result of the previous one as @it@. Should produce some
 ; interesting, procedural-esque code.
 
-{% endhighlight %}
+```
 
 Consult individual files for details.
 
-h2. Versions
+Versions
+========
 
 Many of the utilities are exploratory, or even experimental in nature. Watch the version tags: minor bumps indicate fixes and optimizations, medium bumps feature additions. Major bumps will indicate backwards incompatible changes after v1.0.0: until then, medium bumps may break compatibility.
 
 
-h2. Unit Tests
+Unit Tests
+==========
 
 Run @make@ and watch for errors.
 
