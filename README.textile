@@ -42,17 +42,33 @@ h2. Examples
                                  [x] (when (> x y)) 'gt
                                  [_] 'eq)))
 
+
+; Reversed let-binding. A natural, top-down way to write functions when you
+; don't care about order of side effects. (Like when there are none.)
+
 (defn list->rle [xs] 
-  (lists:reverse 
-    (lists:foldl (fn [x (tuple c n acc)] 
+  (in (lists:reverse encoded-xs)
+      [encoded-xs (lists:foldl group seed-acc xs)
+       group (fn [x (tuple c n acc)] 
                      (if (== c x) 
                        (tuple c (+ 1 n) acc)
                        (tuple x 0 (cons (cons c n) acc))))
-                 (tuple (car xs) 0 '()) 
-                 xs)))
+       seed-acc (tuple (car xs) 0 '())]))
 
-; A kind of currying/function specialization, for very simple funs.
-; Constructs a fun with any <> holes filled with arguments.
+; Point-free function composition and partial application. If you like Unix
+; pipes you'll like this style.
+
+(defn get-hostname [url]
+  (-> (case url ; strip protocol
+        ((binary "http://" (rest bytes)) rest)
+        ((binary "https://" (rest bytes)) rest)
+        (x x))
+      (binary:split <> (binary "/")) car ; strip path
+      (binary:split <> (binary ":")) car ; strip port
+      binary_to_list string:to_lower list_to_binary)) ; lower case
+
+; Function specialization for very simple funs. 
+; Constructs a fun with each <> hole filled with a new argument.
 
 (defn only-positive [xs] (lists:filter (cut >= 0 <>) vs))
 (defn incr-list [xs] (map (cut + 1 <>) xs))
@@ -80,13 +96,6 @@ h2. Examples
 ; Anaphoric variant @(ablock name ...)@ where every statement in @...@ can
 ; access the result of the previous one as @it@. Should produce some
 ; interesting, procedural-esque code.
-
-; Point-free function composition via @(-> e1 e2 ...)@ macro. Provides a Unix
-; pipe-like syntax, with flexible currying.
-
-; Reversed @(in exp [b1 (...) b2 (...)])@ variant of @let*@. Focuses in
-; composing functions, rather than sequencing side effects.
-
 
 {% endhighlight %}
 
