@@ -5,25 +5,33 @@ Erlang's handling of concurrency, failure, and timing (ie side effects) is absol
 The goal is to find abstractions that fit well into Erlang practices.
 
 
-Including
-=========
+Using
+=====
 
-Assuming you use rebar, add the lfe_utils repository to 'deps'. Choose the latest tag.
+Add to {deps,[...]} in rebar.config, if using rebar:
 
-@{lfe_utils, ".*", {git,"git://github.com/amtal/lfe_utils.git",{tag,"v0.1.2"}}}@
+```erlang
+{lfe_utils, ".*", {git,"git://github.com/amtal/lfe_utils.git",{tag,"v1.2.3"}}}
+```
 
+Add to LFE modules:
+
+```clojure 
+(include-lib "lfe_utils/include/all.lfe") 
+```
 
 Examples
 ========
 
 ```clojure
-(include-lib "lfe_utils/include/all.lfe")
+; Traditional (mod:fun ...) external call syntax.
 
-(defnmodule examples
-  (using lists) ; Traditional mod:fun call syntax.
-  (export all))
+(defnmodule example
+  (using lists dict gen_server))
 
-; Simple, functional alternatives to @defun@ and @lambda@.
+(dict:append 'foo 'bar (dict:new))
+
+; Simple, functional alternatives to defun and lambda.
 
 (defn ternary-or
   ['true _] 'true
@@ -38,24 +46,24 @@ Examples
       'true
   [_] 'false)
 
-(defn sum [xs] (lists:foldl (fn [x acc] (+ x acc)) 0 xs))
+(lists:foldl (fn [x acc] (+ x acc)) 0 xs)
 
-(defn comp [y xs] (lists:map (fn [x] (when (< x y)) 'lt
-                                 [x] (when (> x y)) 'gt
-                                 [_] 'eq)))
+(lists:map (fn [x] (when (< x y)) 'lt
+               [x] (when (> x y)) 'gt
+               [_] 'eq))
 
 
 ; Reversed let-binding. A natural, top-down way to write functions when you
-; don't care about order of side effects. (Like when there are none.)
+; don't care about order of side effects. (Like when there aren't any!)
 
 (defn list->rle [xs] 
   (in (lists:reverse encoded-xs)
       [encoded-xs (lists:foldl group seed-acc xs)
+       seed-acc (tuple (car xs) 0 '())
        group (fn [x (tuple c n acc)] 
-                     (if (== c x) 
-                       (tuple c (+ 1 n) acc)
-                       (tuple x 0 (cons (cons c n) acc))))
-       seed-acc (tuple (car xs) 0 '())]))
+               (if (== c x) 
+                 (tuple c (+ 1 n) acc)
+                 (tuple x 0 (cons (cons c n) acc))))]))
 
 ; Point-free function composition and partial application. If you like Unix
 ; pipes you'll like this style.
@@ -72,15 +80,16 @@ Examples
 ; Function specialization for very simple funs. 
 ; Constructs a fun with each <> hole filled with a new argument.
 
-(defn only-positive [xs] (lists:filter (cut >= 0 <>) vs))
-(defn incr-list [xs] (map (cut + 1 <>) xs))
-(defn specialize [a b c d] (cut foo a b <> c <> d)) ; arity-2 fun
+(lists:filter (cut >= 0 <>) vs)
+(lists:map (cut + 1 <>) xs)
+(cut foo a b <> c <> d) ; specialize foo/6 to arity-2 fun
 
 ; Has an "e" (evaluated) variant, where non-hole arguments are evaluated when
 ; the fun's constructed, not when called. (Loop-lifting optimization.)
 
 (defn dialyze [modules] 
-  (lists:map (cute dialyze-module <> (build-plt modules)) modules))
+  (lists:map (cute dialyze-module <> (build-plt modules))
+             modules))
 
 (defn float-re [] 
   (cute re:run <> (element 2 (re:compile '"[+-]?[0-9]*\\.?[0-9]*"))))
@@ -90,14 +99,14 @@ Examples
 (defn fac-fun [] (alambda [n] (if (== 0 n) 1 (* n (self (- n 1))))))
 
 ; Compile-time unique atom generation with @(gensym)@ and @(gensym prefix)@,
-; for writing better macros.
+; for writing better macros...
 
 ; Functional-style @(block name ...)@ and @(return-to name val)@, lexically
-; scoped early returns. 
+; scoped early returns...
 
 ; Anaphoric variant @(ablock name ...)@ where every statement in @...@ can
 ; access the result of the previous one as @it@. Should produce some
-; interesting, procedural-esque code.
+; interesting, procedural-esque code...
 
 ```
 
@@ -112,7 +121,7 @@ Many of the utilities are exploratory, or even experimental in nature. Watch the
 Unit Tests
 ==========
 
-Run @make@ and watch for errors.
+Run make and watch for errors.
 
 
 
