@@ -28,6 +28,8 @@ Add to LFE modules:
 Examples
 ========
 
+The core operations smooth out LFE kinks, and introduce important functional abstractions.
+
 ```clojure
 ; Traditional (mod:fun ...) external call syntax.
 
@@ -55,20 +57,7 @@ Examples
 
 (lists:map (fn [x] (when (< x y)) 'lt
                [x] (when (> x y)) 'gt
-               [_] 'eq))
-
-
-; Reversed let-binding. A natural, top-down way to write functions when you
-; don't care about order of side effects. (Like when there aren't any!)
-
-(defn list->rle [xs] 
-  (in (lists:reverse encoded-xs)
-      [encoded-xs (lists:foldl group seed-acc xs)
-       seed-acc (tuple (car xs) 0 '())
-       group (fn [x (tuple c n acc)] 
-               (if (== c x) 
-                 (tuple c (+ 1 n) acc)
-                 (tuple x 0 (cons (cons c n) acc))))]))
+               [_] 'eq) xs)
 
 ; Point-free function composition and partial application. If you like Unix
 ; pipes you'll like this style.
@@ -82,6 +71,23 @@ Examples
       (binary:split <> (binary ":")) car ; strip port
       binary_to_list string:to_lower list_to_binary)) ; lower case
 
+; Reversed let-binding. A natural, top-down way to write functions when you
+; don't care about order of side effects. (Like when there aren't any!)
+
+(defn list->rle [xs] 
+  (in (lists:reverse encoded-xs)
+      [encoded-xs (lists:foldl group seed-acc xs)
+       seed-acc (tuple (car xs) 0 '())
+       group (fn [x (tuple c n acc)] 
+               (if (== c x) 
+                 (tuple c (+ 1 n) acc)
+                 (tuple x 0 (cons (cons c n) acc))))]))
+```
+
+Other constructs are more situational.
+
+
+```clojure
 ; Function specialization for very simple funs. 
 ; Constructs a fun with each <> hole filled with a new argument.
 
@@ -101,11 +107,19 @@ Examples
 
 ; Self-recursive (anaphoric) lambda variant, binding itself to 'self'.
 
-(defn fac-fun [] (alambda [n] (if (== 0 n) 1 (* n (self (- n 1))))))
+(defn fac-fun [] 
+  (alambda [n] 
+    (if (== 0 n) 
+      1 
+      (* n (self (- n 1))))))
 
 ; Compile-time unique atom generation with @(gensym)@ and @(gensym prefix)@,
 ; for writing better macros...
+```
 
+There are also downright experimental utilities of unknown usefulness. Programming with actors and immutability is still an open problem: there are many useful tools that are yet undiscovered.
+
+```clojure
 ; Functional-style @(block name ...)@ and @(return-to name val)@, lexically
 ; scoped early returns... (This is a common Erlang pattern with throw-try-catch
 ; blocks, and shows up every time system input is sanitized. Can't think of a
