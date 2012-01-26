@@ -6,7 +6,7 @@ A set of language abstractions aimed at solving the following conundrum:
 
 Erlang is known for making some very hard things trivial, and some easy things hard. A lot of that difficulty is introduced by imperative syntax on a functional interpreter.
 
-By implementing techniques from Clojure/Scala/Haskell as LFE macros, we can make syntax match semantics. The awkwardness of writing functional code with imperative syntax is then avoided, and previously unreadable code becomes clean and maintainable.
+By implementing techniques from Clojure/Scheme/Haskell as LFE macros, we can make syntax match semantics. The awkwardness of writing functional code with imperative syntax is then avoided, and previously unreadable code becomes clean and maintainable.
 
 As techniques develop and new abstractions are found, Erlang may become useful in previously inaccessible fields.
 
